@@ -8,7 +8,8 @@ const moment = require("moment-timezone");
 const config = require("./config.json");
 const lang = require("./languages/en.lang"); // Language file added
 
-const bot = new Telegraf(config.apikey);
+require("dotenv").config();
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 global.commands = new Map();
 
 // Auto install missing required modules from command files
@@ -16,7 +17,7 @@ function ensureModuleInstalled(moduleName) {
   try {
     require.resolve(moduleName);
   } catch (e) {
-    console.log(`📦 Installing missing module: ${moduleName}`);
+    console.log(`ðŸ“¦ Installing missing module: ${moduleName}`);
     execSync(`npm install ${moduleName} --save`, { stdio: "inherit" });
   }
 }
@@ -27,7 +28,7 @@ fs.readdirSync("./commands").forEach(file => {
     const commandPath = path.join(__dirname, "commands", file);
     const commandContent = fs.readFileSync(commandPath, "utf-8");
 
-    const requireRegex = /require["'](.+?)["']/g;
+    const requireRegex = /requireî€["'](.+?)["']î€/g;
     let match;
     while ((match = requireRegex.exec(commandContent)) !== null) {
       const moduleName = match[1];
@@ -39,7 +40,7 @@ fs.readdirSync("./commands").forEach(file => {
     const command = require(commandPath);
     if (command.name && command.run) {
       global.commands.set(config.prefix + command.name, command);
-      console.log(`✅ Loaded: ${command.name}`);
+      console.log(`âœ… Loaded: ${command.name}`);
     }
   }
 });
@@ -83,7 +84,7 @@ bot.on("text", async (ctx) => {
     ctx.message.text = `${config.prefix}${cmdName} ${args.join(" ")}`.trim();
     await command.run(ctx);
   } catch (err) {
-    console.error(`❌ Error in command ${cmdName}:`, err);
+    console.error(`âŒ Error in command ${cmdName}:`, err);
     ctx.reply(lang.commandError);
   }
 });
@@ -97,10 +98,10 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🌐 Dummy server listening on port ${PORT}`);
+  console.log(`ðŸŒ Dummy server listening on port ${PORT}`);
 });
 
 // Launch the bot
 bot.launch().then(() => {
-  console.log("🟢 Bot is running!");
+  console.log("ðŸŸ¢ Bot is running!");
 });
