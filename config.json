@@ -1,6 +1,5 @@
 {
-  "botname": "Bot ka nam",
+  "botname": "MKBot",
   "prefix": "/",
-  "apikey": "Botfather bot token",
   "admin": ["admin uid"]
 }
